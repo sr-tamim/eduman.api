@@ -24,9 +24,17 @@ export class AppController {
       if (isConnected) {
         // Further verify by running a simple query
         await this.dataSource.query('SELECT 1');
-        return { status: 'ok', database: 'connected' };
+        return {
+          status: 'ok',
+          database: 'connected',
+          NODE_ENV: process.env.NODE_ENV,
+        };
       } else {
-        return { status: 'error', database: 'disconnected' };
+        return {
+          status: 'error',
+          database: 'disconnected',
+          NODE_ENV: process.env.NODE_ENV,
+        };
       }
     } catch (error) {
       return {
