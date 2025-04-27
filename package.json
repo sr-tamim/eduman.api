@@ -18,6 +18,7 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
+    "sls": "serverless",
     "sls:offline": "NODE_ENV=development serverless offline",
     "sls:deploy": "NODE_ENV=aws-lambda serverless deploy",
     "sls:deploy:prod": "NODE_ENV=aws-lambda serverless deploy --stage prod"
