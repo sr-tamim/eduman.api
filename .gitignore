@@ -3,6 +3,7 @@
 /node_modules
 /build
 .serverless
+.yarn/install-state.gz
 
 # Logs
 logs

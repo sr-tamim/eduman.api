@@ -1,4 +1,3 @@
-# "org" ensures this Service is used with the correct Serverless Framework Access Key.
 org: srtamim
 service: eduman-api
 
@@ -8,6 +7,19 @@ plugins:
 provider:
   name: aws
   runtime: nodejs22.x
+  environment:
+    DATABASE_URL: ${env:DATABASE_URL}
+    NODE_ENV: ${env:NODE_ENV, 'development'}
+
+# Configure packaging to reduce size
+package:
+  individually: true
+  patterns:
+    - '!.git'
+    - '!src/**'
+    - '!test/**'
+    - '!.serverless/**'
+    - '!yarn.lock'
 
 functions:
   main:

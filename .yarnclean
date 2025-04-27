@@ -1,0 +1,51 @@
+# .yarnclean - helps reduce node_modules size when using Yarn
+
+# Tests
+test
+tests
+powered-test
+
+# Documentation
+doc
+docs
+website
+images
+assets
+example
+examples
+coverage
+
+# Build tools
+Makefile
+Gulpfile.js
+Gruntfile.js
+gulpfile.js
+.travis.yml
+.gitlab-ci.yml
+.github
+appveyor.yml
+
+# Configs
+.tern-project
+.gitattributes
+.editorconfig
+.*ignore
+.eslintrc
+.jshintrc
+.flowconfig
+.documentup.json
+.yarn-metadata.json
+.*.yml
+*.yml
+
+# Misc
+*.md
+*.ts
+!*.d.ts
+*.map
+.DS_Store
+LICENSE
+LICENSE.txt
+AUTHORS
+CONTRIBUTORS
+*.log
