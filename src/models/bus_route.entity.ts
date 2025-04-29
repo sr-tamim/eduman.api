@@ -1,20 +1,10 @@
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  OneToMany,
-  CreateDateColumn,
-  UpdateDateColumn,
-  Relation,
-} from 'typeorm';
+import { Entity, Column, OneToMany, Relation } from 'typeorm';
 import BusStop from './bus_stop.entity';
 import BusSchedule from './bus_schedule.entity.js';
+import EntityBase from 'src/entity.base';
 
 @Entity()
-export default class BusRoute {
-  @PrimaryGeneratedColumn({ type: 'int' })
-  declare id: number;
-
+export default class BusRoute extends EntityBase {
   @Column({ type: 'varchar', length: 255 })
   declare name: string;
 
@@ -26,10 +16,4 @@ export default class BusRoute {
 
   @OneToMany(() => BusSchedule, (busSchedule) => busSchedule.route)
   declare schedules: Relation<BusSchedule>[];
-
-  @CreateDateColumn()
-  declare createdAt: Date;
-
-  @UpdateDateColumn({ nullable: true })
-  declare updatedAt: Date;
 }

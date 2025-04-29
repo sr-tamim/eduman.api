@@ -1,19 +1,9 @@
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  ManyToOne,
-  CreateDateColumn,
-  UpdateDateColumn,
-  Relation,
-} from 'typeorm';
+import { Entity, Column, ManyToOne, Relation } from 'typeorm';
 import BusRoute from './bus_route.entity';
+import EntityBase from 'src/entity.base';
 
 @Entity()
-export default class BusSchedule {
-  @PrimaryGeneratedColumn()
-  declare id: number;
-
+export default class BusSchedule extends EntityBase {
   @ManyToOne(() => BusRoute, (busRoute) => busRoute.schedules)
   declare route: Relation<BusRoute>;
 
@@ -22,10 +12,4 @@ export default class BusSchedule {
 
   @Column('time')
   declare arrivalTime: Date;
-
-  @CreateDateColumn()
-  declare createdAt: Date;
-
-  @UpdateDateColumn()
-  declare updatedAt: Date;
 }

@@ -1,22 +1,16 @@
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  CreateDateColumn,
-  UpdateDateColumn,
-} from 'typeorm';
+import { Exclude } from 'class-transformer';
+import EntityBase from 'src/entity.base';
+import { Entity, Column } from 'typeorm';
 
 @Entity()
-export default class User {
-  @PrimaryGeneratedColumn({ type: 'int' })
-  declare id: number;
-
+export default class User extends EntityBase {
   @Column({ type: 'varchar', length: 255 })
   declare name: string;
 
-  @Column({ type: 'varchar', length: 255 })
+  @Column({ type: 'varchar', length: 255, unique: true })
   declare email: string;
 
+  @Exclude()
   @Column({ type: 'varchar', length: 500 })
   declare password_hash: string;
 
@@ -32,10 +26,4 @@ export default class User {
 
   @Column({ type: 'timestamp with time zone', nullable: true })
   declare otp_issued_at: Date | null;
-
-  @CreateDateColumn({ type: 'timestamp with time zone' })
-  declare createdAt: Date;
-
-  @UpdateDateColumn({ type: 'timestamp with time zone', nullable: true })
-  declare updatedAt: Date;
 }

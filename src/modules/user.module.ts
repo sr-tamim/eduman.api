@@ -11,4 +11,4 @@ import UserController from 'src/controllers/user.controller';
   controllers: [UserController],
   exports: [TypeOrmModule, UserService],
 })
-export class UserModule {}
+export default class UserModule {}

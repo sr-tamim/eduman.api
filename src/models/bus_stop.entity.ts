@@ -1,31 +1,18 @@
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  ManyToOne,
-  CreateDateColumn,
-  UpdateDateColumn,
-  Relation,
-} from 'typeorm';
+import { Entity, Column, ManyToOne, Relation } from 'typeorm';
 import BusRoute from './bus_route.entity';
+import EntityBase from 'src/entity.base';
 
 @Entity()
-export default class BusStop {
-  @PrimaryGeneratedColumn()
-  declare id: number;
-
-  @Column()
+export default class BusStop extends EntityBase {
+  @Column({ type: 'varchar', length: '255' })
   declare name: string;
 
-  @Column()
-  declare location: string;
+  @Column({ type: 'double precision', nullable: true })
+  declare latitude: number;
+
+  @Column({ type: 'double precision', nullable: true })
+  declare longitude: number;
 
   @ManyToOne(() => BusRoute, (busRoute) => busRoute.stops)
   declare route: Relation<BusRoute>;
-
-  @CreateDateColumn()
-  declare createdAt: Date;
-
-  @UpdateDateColumn()
-  declare updatedAt: Date;
 }
