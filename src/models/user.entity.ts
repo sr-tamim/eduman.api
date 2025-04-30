@@ -1,7 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Exclude } from 'class-transformer';
 import EntityBase from 'src/entity.base';
-import { Entity, Column } from 'typeorm';
+import { Entity, Column, OneToMany, Relation } from 'typeorm';
+import BusManager from './bus_manager.entity';
 
 @Entity()
 export default class User extends EntityBase {
@@ -38,4 +39,11 @@ export default class User extends EntityBase {
 
   @Column({ type: 'timestamp with time zone', nullable: true })
   declare otp_issued_at: Date | null;
+
+  @ApiProperty({
+    description: 'Buses managed by this user',
+    type: () => [BusManager],
+  })
+  @OneToMany(() => BusManager, (busManager) => busManager.user)
+  declare managed_buses: Relation<BusManager>[];
 }
