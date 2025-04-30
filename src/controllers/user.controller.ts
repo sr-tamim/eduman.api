@@ -25,6 +25,8 @@ import { TransformInterceptor } from 'src/interceptors/transform.interceptor';
 import { AdminGuard } from 'src/guards/admin.guard';
 import { AuthGuard } from 'src/guards/auth.guard';
 import User from 'src/models/user.entity';
+import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiMyResponse } from 'src/decorators/myResponse.decorator';
 
 const setCookieToken = (res: Response, token: string, expiryTime: number) => {
   // set token in cookie httpOnly and secure
@@ -47,6 +49,7 @@ const clearCookieToken = (res: Response) => {
   });
 };
 
+@ApiTags('Users')
 @Controller({
   version: '1',
   path: 'users',
@@ -55,6 +58,13 @@ const clearCookieToken = (res: Response) => {
 export default class UserController {
   constructor(private readonly usersService: UserService) {}
 
+  @ApiOperation({ summary: 'Get all users' })
+  @ApiMyResponse({
+    status: 200,
+    description: 'List of all users',
+    model: User,
+    isArray: true,
+  })
   @Get('/')
   @UseGuards(AdminGuard)
   @UseInterceptors(TransformInterceptor)
@@ -65,6 +75,12 @@ export default class UserController {
     return this.usersService.all(forDropdown);
   }
 
+  @ApiOperation({ summary: 'Register a new user' })
+  @ApiMyResponse({
+    status: 201,
+    description: 'User registered successfully',
+    model: User,
+  })
   @Post('register')
   @UseInterceptors(TransformInterceptor)
   async register(@Body(new ValidationPipe()) createUserDto: CreateUserDto) {
@@ -72,6 +88,12 @@ export default class UserController {
     return res;
   }
 
+  @ApiOperation({ summary: 'User login' })
+  @ApiMyResponse({
+    status: 200,
+    description: 'User logged in successfully',
+    model: User,
+  })
   @UseInterceptors(TransformInterceptor)
   @Post('login')
   async login(
@@ -84,6 +106,12 @@ export default class UserController {
     return user;
   }
 
+  @ApiOperation({ summary: 'Get user profile' })
+  @ApiMyResponse({
+    status: 200,
+    description: 'User profile retrieved successfully',
+    model: User,
+  })
   @UseGuards(AuthGuard)
   @UseInterceptors(TransformInterceptor)
   @Get('profile')
@@ -93,6 +121,12 @@ export default class UserController {
     return info;
   }
 
+  @ApiOperation({ summary: 'Update user profile' })
+  @ApiMyResponse({
+    status: 200,
+    description: 'User profile updated successfully',
+    model: User,
+  })
   @Patch('profile')
   @UseGuards(AuthGuard)
   @UseInterceptors(TransformInterceptor, FileInterceptor('photo'))
@@ -114,6 +148,8 @@ export default class UserController {
     return this.usersService.updateProfile(user.id, editUserDto);
   }
 
+  @ApiOperation({ summary: 'Logout user' })
+  @ApiResponse({ status: 200, description: 'User logged out successfully' })
   @UseGuards(AuthGuard)
   @Post('logout')
   logout(@Res({ passthrough: true }) res: Response) {
@@ -121,6 +157,12 @@ export default class UserController {
     return { message: 'Logged out' };
   }
 
+  @ApiOperation({ summary: 'Change user password' })
+  @ApiMyResponse({
+    status: 200,
+    description: 'Password changed successfully',
+    model: Boolean,
+  })
   @UseGuards(AuthGuard)
   @UseInterceptors(TransformInterceptor)
   @Patch('change-password')
@@ -136,6 +178,12 @@ export default class UserController {
     );
   }
 
+  @ApiOperation({ summary: 'Request password reset OTP' })
+  @ApiMyResponse({
+    status: 200,
+    description: 'OTP sent to user email',
+    model: String,
+  })
   @UseInterceptors(TransformInterceptor)
   @Post('reset-password/otp')
   async resetPasswordOtp(@Body('email') email: string) {
@@ -147,6 +195,12 @@ export default class UserController {
     return 'OTP sent to your email';
   }
 
+  @ApiOperation({ summary: 'Reset user password' })
+  @ApiMyResponse({
+    status: 200,
+    description: 'Password reset successfully',
+    model: String,
+  })
   @UseInterceptors(TransformInterceptor)
   @Post('reset-password')
   async resetPassword(
@@ -157,6 +211,12 @@ export default class UserController {
     return this.usersService.updatePasswordWithOtp(email, otp, newPassword);
   }
 
+  @ApiOperation({ summary: 'Reset password for a user (Admin only)' })
+  @ApiMyResponse({
+    status: 200,
+    description: 'Password reset successfully by admin',
+    model: String,
+  })
   @UseGuards(AdminGuard)
   @UseInterceptors(TransformInterceptor)
   @Patch('reset-password/:email')
@@ -169,6 +229,12 @@ export default class UserController {
     return password;
   }
 
+  @ApiOperation({ summary: 'Update user role (Admin only)' })
+  @ApiMyResponse({
+    status: 200,
+    description: 'User role updated successfully',
+    model: Boolean,
+  })
   @UseGuards(AdminGuard)
   @UseInterceptors(TransformInterceptor)
   @Patch('role')

@@ -30,6 +30,7 @@
     "@nestjs/core": "^11.0.1",
     "@nestjs/jwt": "^11.0.0",
     "@nestjs/platform-express": "^11.0.1",
+    "@nestjs/swagger": "^11.1.5",
     "@nestjs/typeorm": "^11.0.0",
     "aws-lambda": "^1.0.7",
     "bcrypt": "^5.1.1",

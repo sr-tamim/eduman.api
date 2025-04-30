@@ -5,9 +5,11 @@ import { AppModule } from './app.module';
 import { VersioningType } from '@nestjs/common';
 import cookieParser from 'cookie-parser';
 import { LoggingInterceptor } from './interceptors/logging.interceptor';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 let server: Handler;
 const runningOnLambda = process.env.NOT_LAMBDA !== 'true';
+const isDev = process.env.NODE_ENV === 'development';
 
 const bootstrap: () => Promise<Handler | void> = async () => {
   const app = await NestFactory.create(AppModule, {
@@ -22,6 +24,13 @@ const bootstrap: () => Promise<Handler | void> = async () => {
   app.use(cookieParser());
   app.useGlobalInterceptors(new LoggingInterceptor());
   // app.useGlobalPipes(new ValidationPipe());
+
+  const swaggerConfig = new DocumentBuilder()
+    .setTitle('EduMan API')
+    .addServer(runningOnLambda ? (!isDev ? '/prod' : '/dev') : '/')
+    .build();
+  const documentFactory = SwaggerModule.createDocument(app, swaggerConfig);
+  SwaggerModule.setup('swagger', app, documentFactory);
 
   if (!runningOnLambda) {
     await app.listen(process.env.APP_PORT || 3000);
