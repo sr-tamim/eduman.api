@@ -5,12 +5,25 @@ import BusSchedule from 'src/models/bus_schedule.entity';
 import BusStop from 'src/models/bus_stop.entity';
 import Bus from 'src/models/bus.entity';
 import BusManager from 'src/models/bus_manager.entity';
+import BusJourney from 'src/models/bus_journey.entity';
+import BusJourneyCheckIn from 'src/models/bus_journey_checkin.entity';
+import BusService from 'src/services/bus.service';
+import BusController from 'src/controllers/bus.controller';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([BusRoute, BusSchedule, BusStop, Bus, BusManager]),
+    TypeOrmModule.forFeature([
+      BusRoute,
+      BusSchedule,
+      BusStop,
+      Bus,
+      BusManager,
+      BusJourney,
+      BusJourneyCheckIn,
+    ]),
   ],
-  providers: [],
-  controllers: [],
+  providers: [BusService],
+  controllers: [BusController],
+  exports: [BusService],
 })
 export default class BusModule {}

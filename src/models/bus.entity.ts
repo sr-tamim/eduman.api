@@ -3,6 +3,7 @@ import { Entity, Column, ManyToOne, Relation, OneToMany } from 'typeorm';
 import BusRoute from './bus_route.entity';
 import EntityBase from 'src/entity.base';
 import BusManager from './bus_manager.entity';
+import BusJourney from './bus_journey.entity';
 
 @Entity()
 export default class Bus extends EntityBase {
@@ -35,6 +36,19 @@ export default class Bus extends EntityBase {
   })
   declare status: 'active' | 'maintenance' | 'inactive';
 
+  @ApiProperty({
+    description: 'Weekly off days (0 = Sunday, 1 = Monday, etc.)',
+    type: 'array',
+    items: { type: 'integer', minimum: 0, maximum: 6 },
+  })
+  @Column({
+    type: 'int',
+    array: true,
+    default: '{}',
+    name: 'off_days',
+  })
+  declare off_days: number[];
+
   @ApiProperty({ description: 'Notes about the bus', nullable: true })
   @Column({ type: 'text', nullable: true })
   declare notes: string;
@@ -45,7 +59,7 @@ export default class Bus extends EntityBase {
     nullable: true,
   })
   @ManyToOne(() => BusRoute, (busRoute) => busRoute.buses, { nullable: true })
-  declare assigned_route: Relation<BusRoute>;
+  declare assigned_route: Relation<BusRoute> | null;
 
   @ApiProperty({
     description: 'Managers of this bus',
@@ -53,4 +67,11 @@ export default class Bus extends EntityBase {
   })
   @OneToMany(() => BusManager, (busManager) => busManager.bus)
   declare managers: Relation<BusManager>[];
+
+  @ApiProperty({
+    description: 'Journeys of this bus',
+    type: () => [BusJourney],
+  })
+  @OneToMany(() => BusJourney, (busJourney) => busJourney.bus)
+  declare journeys: Relation<BusJourney>[];
 }
