@@ -8,7 +8,9 @@ import BusManager from 'src/models/bus_manager.entity';
 import BusJourney from 'src/models/bus_journey.entity';
 import BusJourneyCheckIn from 'src/models/bus_journey_checkin.entity';
 import BusService from 'src/services/bus.service';
+import BusScheduleService from 'src/services/bus_schedule.service';
 import BusController from 'src/controllers/bus.controller';
+import BusScheduleController from 'src/controllers/bus_schedule.controller';
 
 @Module({
   imports: [
@@ -22,8 +24,8 @@ import BusController from 'src/controllers/bus.controller';
       BusJourneyCheckIn,
     ]),
   ],
-  providers: [BusService],
-  controllers: [BusController],
-  exports: [BusService],
+  providers: [BusService, BusScheduleService],
+  controllers: [BusController, BusScheduleController],
+  exports: [BusService, BusScheduleService],
 })
 export default class BusModule {}

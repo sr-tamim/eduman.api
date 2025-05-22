@@ -2,13 +2,12 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Entity, Column, OneToMany, Relation } from 'typeorm';
 import BusStop from './bus_stop.entity';
 import BusSchedule from './bus_schedule.entity';
-import Bus from './bus.entity';
 import EntityBase from 'src/entity.base';
 
 @Entity()
 export default class BusRoute extends EntityBase {
   @ApiProperty({ description: 'Name of the bus route', maxLength: 255 })
-  @Column({ type: 'varchar', length: 255 })
+  @Column({ type: 'varchar', length: 500, unique: true })
   declare name: string;
 
   @ApiProperty({ description: 'Description of the bus route', nullable: true })
@@ -28,11 +27,4 @@ export default class BusRoute extends EntityBase {
   })
   @OneToMany(() => BusSchedule, (busSchedule) => busSchedule.route)
   declare schedules: Relation<BusSchedule>[];
-
-  @ApiProperty({
-    description: 'Buses assigned to this route',
-    type: () => [Bus],
-  })
-  @OneToMany(() => Bus, (bus) => bus.assigned_route)
-  declare buses: Relation<Bus>[];
 }

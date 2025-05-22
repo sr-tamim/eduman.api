@@ -1,13 +1,7 @@
 import { ApiProperty, PartialType } from '@nestjs/swagger';
 import Bus from 'src/models/bus.entity';
 
-export class CreateBusDto extends Bus {
-  @ApiProperty({
-    description: 'ID of the route to assign the bus to',
-    required: false,
-  })
-  route_id?: number;
-}
+export class CreateBusDto extends Bus {}
 
 export class UpdateBusDto extends PartialType(CreateBusDto) {}
 

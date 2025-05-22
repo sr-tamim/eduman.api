@@ -58,16 +58,6 @@ export default class BusService {
       if (filter.status) {
         whereClause.status = filter.status;
       }
-      // Handle route filtering by relation
-      if (filter.route_id) {
-        return this.busRepository.find({
-          where: {
-            ...whereClause,
-            assigned_route: { id: filter.route_id },
-          },
-          relations: ['assigned_route', 'managers', 'managers.user'],
-        });
-      }
     }
 
     return this.busRepository.find({
@@ -92,42 +82,11 @@ export default class BusService {
   async createBus(createBusDto: CreateBusDto) {
     const bus = this.busRepository.create(createBusDto);
 
-    // If route_id is provided, find and assign the route
-    if (createBusDto.route_id) {
-      const route = await this.busRouteRepository.findOneBy({
-        id: createBusDto.route_id,
-      });
-      if (!route) {
-        throw new BadRequestException(
-          `Route with ID ${createBusDto.route_id} not found`,
-        );
-      }
-      bus.assigned_route = route;
-    }
-
     return this.busRepository.save(bus);
   }
 
   async updateBus(id: number, updateBusDto: UpdateBusDto) {
     const bus = await this.getBusById(id);
-
-    // Update route if route_id is provided
-    if (updateBusDto.route_id !== undefined) {
-      if (updateBusDto.route_id === null) {
-        bus.assigned_route = null;
-      } else {
-        const route = await this.busRouteRepository.findOneBy({
-          id: updateBusDto.route_id,
-        });
-        if (!route) {
-          throw new BadRequestException(
-            `Route with ID ${updateBusDto.route_id} not found`,
-          );
-        }
-        bus.assigned_route = route;
-      }
-      delete updateBusDto.route_id;
-    }
 
     // Update other bus properties
     Object.assign(bus, updateBusDto);

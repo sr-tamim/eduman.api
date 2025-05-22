@@ -38,11 +38,6 @@ export class BusFilterDto {
   @IsOptional()
   @IsEnum(['active', 'maintenance', 'inactive'])
   status?: 'active' | 'maintenance' | 'inactive';
-
-  @ApiProperty({ required: false, description: 'Filter by route ID' })
-  @IsOptional()
-  @IsNumber()
-  route_id?: number;
 }
 
 export class JourneyFilterDto {

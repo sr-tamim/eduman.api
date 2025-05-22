@@ -1,9 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Entity, Column, ManyToOne, Relation, OneToMany } from 'typeorm';
-import BusRoute from './bus_route.entity';
+import { Entity, Column, Relation, OneToMany } from 'typeorm';
 import EntityBase from 'src/entity.base';
 import BusManager from './bus_manager.entity';
 import BusJourney from './bus_journey.entity';
+import BusSchedule from './bus_schedule.entity';
 
 @Entity()
 export default class Bus extends EntityBase {
@@ -54,14 +54,6 @@ export default class Bus extends EntityBase {
   declare notes: string;
 
   @ApiProperty({
-    description: 'Route associated with the bus',
-    type: () => BusRoute,
-    nullable: true,
-  })
-  @ManyToOne(() => BusRoute, (busRoute) => busRoute.buses, { nullable: true })
-  declare assigned_route: Relation<BusRoute> | null;
-
-  @ApiProperty({
     description: 'Managers of this bus',
     type: () => [BusManager],
   })
@@ -74,4 +66,11 @@ export default class Bus extends EntityBase {
   })
   @OneToMany(() => BusJourney, (busJourney) => busJourney.bus)
   declare journeys: Relation<BusJourney>[];
+
+  @ApiProperty({
+    description: 'Schedules assigned to this bus',
+    type: () => [BusSchedule],
+  })
+  @OneToMany(() => BusSchedule, (busSchedule) => busSchedule.bus)
+  declare schedules: Relation<BusSchedule>[];
 }

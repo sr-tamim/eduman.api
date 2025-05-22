@@ -17,10 +17,27 @@ export default class BusStop extends EntityBase {
   @Column({ type: 'double precision', nullable: true })
   declare longitude: number;
 
+  @ApiProperty({ description: 'Sequence/order of the stop in the route' })
+  @Column({ type: 'int', default: 0 })
+  declare sequence: number;
+
+  @ApiProperty({
+    description: 'Scheduled arrival time at this stop',
+    nullable: true,
+    required: false,
+    example: new Date().toISOString().split('T')[1].slice(0, 5),
+  })
+  @Column({ type: 'time', nullable: true })
+  declare scheduled_arrival_time: Date | null;
+
   @ApiProperty({
     description: 'Route associated with the bus stop',
     type: () => BusRoute,
+    required: false,
   })
-  @ManyToOne(() => BusRoute, (busRoute) => busRoute.stops)
+  @ManyToOne(() => BusRoute, (busRoute) => busRoute.stops, {
+    onDelete: 'CASCADE',
+    nullable: false,
+  })
   declare route: Relation<BusRoute>;
 }
