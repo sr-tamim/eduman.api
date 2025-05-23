@@ -20,6 +20,7 @@ provider:
     MAIL_HOST: ${env:MAIL_HOST}
     MAIL_PORT: ${env:MAIL_PORT}
     MAIL_SERVICE: ${env:MAIL_SERVICE}
+    GEMINI_API_KEY: ${env:GEMINI_API_KEY}
 
 # Configure packaging to reduce size
 package:
