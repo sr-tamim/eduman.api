@@ -31,6 +31,8 @@ package:
     - '!test/**'
     - '!.serverless/**'
     - '!yarn.lock'
+    - '!.yarn/**'
+    - '!node_modules/**'
 
 functions:
   main:

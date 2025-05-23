@@ -1,6 +1,9 @@
 import {
+  BadRequestException,
   Body,
   Controller,
+  Delete,
+  Get,
   Post,
   Req,
   UseGuards,
@@ -8,7 +11,6 @@ import {
 } from '@nestjs/common';
 import { ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Request } from 'express';
-import { ApiMyResponse } from 'src/decorators/myResponse.decorator';
 import { ChatbotPromptDto } from 'src/dto/chatbot.dto';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { TransformInterceptor } from 'src/interceptors/transform.interceptor';
@@ -25,11 +27,6 @@ export default class ChatbotController {
   constructor(private readonly chatbotService: ChatbotService) {}
 
   @ApiOperation({ summary: 'Get chat response and history' })
-  @ApiMyResponse({
-    status: 201,
-    description: 'Chat response and history',
-    model: String,
-  })
   @ApiBody({
     description: 'Chat prompt',
     type: ChatbotPromptDto,
@@ -43,8 +40,32 @@ export default class ChatbotController {
     const user = getUser(req);
     const chatId = user!.id?.toString();
     const { prompt } = chatDto;
+    if (!prompt) {
+      throw new BadRequestException('Prompt is required');
+    }
     await this.chatbotService.generateChatResponse(prompt, chatId);
     const history = await this.chatbotService.getChatHistory(chatId);
-    return history.slice(2);
+    return history.slice(1);
+  }
+
+  @ApiOperation({ summary: 'Get chat history' })
+  @UseGuards(AuthGuard)
+  @Get('/history')
+  async getChatHistory(@Req() req: Request) {
+    const user = getUser(req);
+    const chatId = user!.id?.toString();
+    const history = await this.chatbotService.getChatHistory(chatId);
+    return history.slice(1);
+  }
+
+  @ApiOperation({ summary: 'Clear chat history' })
+  @UseGuards(AuthGuard)
+  @Delete('/history')
+  async clearChatHistory(@Req() req: Request) {
+    const user = getUser(req);
+    const chatId = user!.id?.toString();
+    this.chatbotService.clearChatHistory(chatId);
+    const history = await this.chatbotService.getChatHistory(chatId);
+    return history.slice(1);
   }
 }
