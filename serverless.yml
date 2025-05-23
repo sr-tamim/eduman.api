@@ -10,7 +10,16 @@ provider:
   region: ap-southeast-1
   environment:
     DATABASE_URL: ${env:DATABASE_URL}
-    NODE_ENV: ${env:NODE_ENV, 'development'}
+    NODE_ENV: 'production'
+    JWT_SECRET: ${env:JWT_SECRET}
+    JWT_TOKEN_NAME: ${env:JWT_TOKEN_NAME}
+    WEB_TOKEN_EXPIRY_TIME_MINUTES: ${env:WEB_TOKEN_EXPIRY_TIME_MINUTES}
+    CORS_ORIGINS: ${env:CORS_ORIGINS}
+    MAIL_SENDER: ${env:MAIL_SENDER}
+    MAIL_PASSWORD: ${env:MAIL_PASSWORD}
+    MAIL_HOST: ${env:MAIL_HOST}
+    MAIL_PORT: ${env:MAIL_PORT}
+    MAIL_SERVICE: ${env:MAIL_SERVICE}
 
 # Configure packaging to reduce size
 package:
